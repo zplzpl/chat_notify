@@ -1,6 +1,11 @@
 # chat_notify
 
 Hi, this is telegram bot announcement program.
+# Build it
+
+* clone this repo
+* go build .
+* you will get execute file
 
 # How does it work?
 

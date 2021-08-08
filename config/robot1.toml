@@ -1,0 +1,14 @@
+[Telegram]
+BotKey = "1779011813:AAHKeFFD5R9mAg8pRfSKXfFkg05Mbo0NS3Q"
+
+[MysqlDB]
+Host = "127.0.0.1"
+Port = 3306
+Username = "root"
+Password = "root"
+DBName = "strangerbot"
+Charset = "utf8"
+MaxOpenConns = 1000
+MaxIdleConns = 1000
+# time.Second
+ConnMaxLifetime = 10

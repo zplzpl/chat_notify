@@ -1,0 +1,16 @@
+[Telegram]
+# Telegram Bot Key Input Here
+BotKey = "Telegram Bot Key"
+
+# Bot Program DB Connect Info
+[MysqlDB]
+Host = "127.0.0.1"
+Port = 3306
+Username = "root"
+Password = "root"
+DBName = "strangerbot"
+# The following configuration can be left unchanged
+Charset = "utf8"
+MaxOpenConns = 1000
+MaxIdleConns = 1000
+ConnMaxLifetime = 10

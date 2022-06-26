@@ -67,6 +67,7 @@ func (s *Sender) process(payload interface{}) {
 
 	if err := s.handleSendEntry(sendEntry); err != nil {
 		log.Println("send entry handle err: ", err.Error(), "chat_id: ", sendEntry.ChatId)
+		return
 	}
 
 	s.successTotal.Inc()

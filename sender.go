@@ -40,11 +40,12 @@ func NewSender(workerNum int, telegramBot *tgbotapi.BotAPI) (*Sender, error) {
 
 func (s *Sender) handleSendEntry(e *SendEntry) error {
 
+	msg := tgbotapi.NewMessage(e.ChatId, e.Message)
+
+	var err error
 	for i := 0; i < 10; i++ {
 
-		msg := tgbotapi.NewMessage(e.ChatId, e.Message)
-
-		_, err := s.telegramBot.Send(msg)
+		_, err = s.telegramBot.Send(msg)
 		if err != nil {
 			log.Println("telegramBot.Send err: ", err.Error())
 			time.Sleep(10 * time.Duration(i) * time.Millisecond)
@@ -55,7 +56,7 @@ func (s *Sender) handleSendEntry(e *SendEntry) error {
 
 	}
 
-	return nil
+	return err
 }
 
 func (s *Sender) process(payload interface{}) {

@@ -41,6 +41,7 @@ func NewSender(workerNum int, telegramBot *tgbotapi.BotAPI) (*Sender, error) {
 func (s *Sender) handleSendEntry(e *SendEntry) error {
 
 	msg := tgbotapi.NewMessage(e.ChatId, e.Message)
+	msg.DisableWebPagePreview = false
 
 	var err error
 	for i := 0; i < 10; i++ {

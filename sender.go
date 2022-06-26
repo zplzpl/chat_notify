@@ -6,12 +6,14 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/panjf2000/ants"
+	"go.uber.org/atomic"
 )
 
 type Sender struct {
-	workerNum   int
-	telegramBot *tgbotapi.BotAPI
-	pool        *ants.PoolWithFunc
+	workerNum    int
+	telegramBot  *tgbotapi.BotAPI
+	pool         *ants.PoolWithFunc
+	successTotal *atomic.Int64
 }
 
 type SendEntry struct {
@@ -22,8 +24,9 @@ type SendEntry struct {
 func NewSender(workerNum int, telegramBot *tgbotapi.BotAPI) (*Sender, error) {
 
 	s := &Sender{
-		workerNum:   workerNum,
-		telegramBot: telegramBot,
+		workerNum:    workerNum,
+		telegramBot:  telegramBot,
+		successTotal: atomic.NewInt64(0),
 	}
 
 	pool, err := ants.NewPoolWithFunc(workerNum, s.process)
@@ -65,6 +68,8 @@ func (s *Sender) process(payload interface{}) {
 	if err := s.handleSendEntry(sendEntry); err != nil {
 		log.Println("send entry handle err: ", err.Error(), "chat_id: ", sendEntry.ChatId)
 	}
+
+	s.successTotal.Inc()
 
 }
 

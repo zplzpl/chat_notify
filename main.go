@@ -154,6 +154,10 @@ func runLoop(upCfg chan struct{}, signals chan os.Signal, message string, worker
 		log.Println("sender close err: ", err.Error())
 	}
 
+	successTotal := sender.successTotal.Load()
+
+	log.Println("send success total: ", successTotal)
+	log.Println("send failed total: ", int64(num)-successTotal)
 	log.Println("send total: ", num)
 
 	return nil

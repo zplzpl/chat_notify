@@ -19,6 +19,7 @@ func main() {
 	// flag params
 	configFilename := flag.String("cfg", "", "config filename,didn't need input file extend name.")
 	notifyFilename := flag.String("notify", "", "notify filename.")
+	mod := flag.String("scope", "all", "send scope. enum: all,sub,unsub , default: all")
 	workNum := flag.Int("worker", 5, "send worker num. default: 5")
 	flag.Parse()
 
@@ -28,6 +29,12 @@ func main() {
 
 	if len(*notifyFilename) == 0 {
 		panic(errors.New("notify filename is empty"))
+	}
+
+	switch *mod {
+	case "all", "sub", "unsub":
+	default:
+		panic(errors.New("scope value is invalid"))
 	}
 
 	log.Println("config file: ", *configFilename, "notify file: ", *notifyFilename)
@@ -60,7 +67,7 @@ func main() {
 	defer close(signals)
 
 	// run loop
-	if err := runLoop(upCfg, signals, string(buf), *workNum); err != nil {
+	if err := runLoop(upCfg, signals, *mod, string(buf), *workNum); err != nil {
 		log.Println("run error: ", err.Error())
 		panic(err)
 	} else {
@@ -69,7 +76,7 @@ func main() {
 
 }
 
-func runLoop(upCfg chan struct{}, signals chan os.Signal, message string, workerNum int) error {
+func runLoop(upCfg chan struct{}, signals chan os.Signal, scope string, message string, workerNum int) error {
 
 	// load config
 	cfg, err := LoadConfig()
@@ -125,7 +132,7 @@ func runLoop(upCfg chan struct{}, signals chan os.Signal, message string, worker
 	var num int
 	for {
 
-		list, err := repo.GetChatList(ctx, offset, limit)
+		list, err := repo.GetChatList(ctx, scope, offset, limit)
 		if err != nil {
 			continue
 		}

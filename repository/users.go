@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"chat_notify/repository/model"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -24,10 +25,19 @@ func (p *Repository) GetChatCnt(ctx context.Context) (int64, error) {
 	return cnt.Cnt, nil
 }
 
-func (p *Repository) GetChatList(ctx context.Context, offset, limit int64) ([]*model.Users, error) {
+func (p *Repository) GetChatList(ctx context.Context, scope string, offset, limit int64) ([]*model.Users, error) {
 
 	var list []*model.Users
-	err := p.db.Offset(offset).Limit(limit).Find(&list).Error
+
+	q := p.db
+	switch scope {
+	case "sub":
+		q.Where("is_subscribed = 1")
+	case "unsub":
+		q.Where("is_subscribed = 0")
+	}
+
+	err := q.Order("id desc").Offset(offset).Limit(limit).Find(&list).Error
 	if err != nil {
 		return nil, err
 	}

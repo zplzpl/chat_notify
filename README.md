@@ -42,9 +42,14 @@ ConnMaxLifetime = 10
 
 * cfg: No need to enter the file extension
 * notify: File needs no extension
+* scope: The range of users the message is sent from. enum value: all,sub(subscribed users),unsub(unsubscribed users),default: all
 
 ```
 ./chat_notify -cfg=robot1 -notify=20210804
+```
+
+```
+./chat_notify -cfg=robot1 -notify=20210804 -scope=sub
 ```
 
 console will output:
